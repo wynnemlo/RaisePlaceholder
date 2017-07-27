@@ -9,7 +9,7 @@
 import UIKit
 
 public class RaisePlaceholder: UITextField, UITextFieldDelegate {
-
+    
     @IBInspectable public var animationDuration: Double = 0.5
     @IBInspectable public var subjectColor: UIColor = UIColor.black
     @IBInspectable public var underLineColor: UIColor = UIColor.black
@@ -33,6 +33,27 @@ public class RaisePlaceholder: UITextField, UITextFieldDelegate {
         createPlaceholderLabel()
         self.clipsToBounds = false
         self.borderStyle = .none
+        
+        if let placeholderLabel = self.placeholderLabel, self.text != "" {
+            
+            if placeholderLabel.alpha == 0 {
+                placeholderLabel.alpha = 1
+            }
+            
+            if self.placeholder == "" {
+                self.titlePlaceholder = placeholderLabel.text
+            } else {
+                self.titlePlaceholder = self.placeholder
+            }
+            
+            self.placeholder = ""
+            
+            let frame = placeholderLabel.frame
+            placeholderLabel.text = self.titlePlaceholder
+            placeholderLabel.font = UIFont.systemFont(ofSize: self.placeholderLabelFontSize)
+            placeholderLabel.textColor = self.subjectColor
+            placeholderLabel.frame.origin.y = frame.origin.y - placeholderLabel.frame.size.height - (self.frame.size.height / 2 - frame.size.height / 2)
+        }
     }
     
     fileprivate func drawUnderLine() {
